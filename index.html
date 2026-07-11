@@ -18,6 +18,10 @@
     --gold: #D6252F;
     --gold-soft: #FFFFFF;
     --line: #D7E8DC;
+    --pos-tw: #1E6FD9;
+    --pos-def: #1B9E5A;
+    --pos-mid: #E0A62B;
+    --pos-att: #D6252F;
   }
 
   * { box-sizing: border-box; }
@@ -209,8 +213,28 @@
   }
   td.pos{
     font-family: 'Space Mono', monospace;
-    color: var(--gold);
     font-weight: 700;
+    font-size: 12px;
+  }
+  .pos-badge{
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .pos-badge.tw{ background: var(--pos-tw); }
+  .pos-badge.def{ background: var(--pos-def); }
+  .pos-badge.mid{ background: var(--pos-mid); color: #3A2C05; }
+  .pos-badge.att{ background: var(--pos-att); }
+  .pos-badge.neutral{ background: #9AA8A1; }
+  .domestic-star{
+    color: var(--pos-mid);
+    margin-right: 3px;
     font-size: 12px;
   }
   td.route{
@@ -221,6 +245,26 @@
   td.route .arrow-icon{ color: var(--gold); margin: 0 0.35rem; }
   td.num{ font-family: 'Space Mono', monospace; }
   td.date{ font-family: 'Space Mono', monospace; color: var(--ink-soft); font-size: 12.5px; }
+
+  .crest{
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    vertical-align: -3px;
+    margin-right: 4px;
+    border-radius: 2px;
+  }
+
+  .checkbox-label{
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    user-select: none;
+  }
+  .checkbox-label input{ accent-color: var(--pitch); width: 15px; height: 15px; }
 
   .empty-state{
     text-align: center;
@@ -266,6 +310,16 @@
     <div class="stat"><span class="num" id="stat-total">&ndash;</span><span class="label">Transfers erfasst</span></div>
     <div class="stat"><span class="num" id="stat-clubs">&ndash;</span><span class="label">Vereine beteiligt</span></div>
     <div class="stat"><span class="num" id="stat-updated">&ndash;</span><span class="label">Zuletzt aktualisiert</span></div>
+    <div class="stat"><span class="num" id="stat-active-club" style="font-size:1.1rem;">&ndash;</span><span class="label">Aktivster Verein</span></div>
+    <div class="stat"><span class="num" id="stat-top-strength">&ndash;</span><span class="label">Stärkster Neuzugang</span></div>
+  </div>
+
+  <div style="margin-top:1.4rem; display:flex; gap:1.1rem; flex-wrap:wrap; align-items:center; font-size:12px; color:var(--ink-soft);">
+    <span class="pos-badge tw">TW</span>
+    <span class="pos-badge def">Abwehr</span>
+    <span class="pos-badge mid">Mittelfeld</span>
+    <span class="pos-badge att">Sturm</span>
+    <span><span class="domestic-star">★</span> = beide Vereine aus Nordirland-1</span>
   </div>
 </header>
 
@@ -277,6 +331,10 @@
   <select id="filter-nat" aria-label="Nationalität filtern">
     <option value="">Alle Nationalitäten</option>
   </select>
+  <label class="checkbox-label">
+    <input type="checkbox" id="filter-domestic">
+    Nur Nordirland-intern <span class="domestic-star" style="margin:0;">★</span>
+  </label>
 </div>
 
 <main>
@@ -373,6 +431,33 @@
     return new Date(year, month - 1, day);
   }
 
+  function classifyPosition(pos){
+    if(!pos) return 'neutral';
+    const first = pos.split(/\s+/)[0];
+    if(first === 'TW') return 'tw';
+    if(['LIB','MD','LV','RV','IV'].includes(first)) return 'def';
+    if(['DM','ZM','LM','RM','OM','ML','MR'].includes(first)) return 'mid';
+    if(['ST','MS','STL','STR'].includes(first)) return 'att';
+    return 'neutral';
+  }
+
+  function posBadge(pos){
+    if(!pos) return '–';
+    return `<span class="pos-badge ${classifyPosition(pos)}">${pos}</span>`;
+  }
+
+  let niClubNames = new Set();
+  function isDomestic(t){
+    return niClubNames.has(t.from_club) && niClubNames.has(t.to_club);
+  }
+  function starPrefix(t){
+    return isDomestic(t) ? '<span class="domestic-star" title="Beide Vereine aus Nordirland-1">★</span>' : '';
+  }
+  function crestImg(clubId){
+    if(!clubId) return '';
+    return `<img class="crest" loading="lazy" alt="" src="https://www.anstoss-online.de/images/wappen/90/wappen${clubId}.png" onerror="this.style.display='none'">`;
+  }
+
   function fillTicker(data){
     const el = document.getElementById('ticker');
     if(!data.length){ el.innerHTML = '<span>Noch keine Transfers erfasst.</span>'; return; }
@@ -406,14 +491,33 @@
       : '–';
   }
 
+  function updateExtraStats(allTransfers){
+    const counts = {};
+    allTransfers.forEach(t => {
+      if(t.from_club) counts[t.from_club] = (counts[t.from_club] || 0) + 1;
+      if(t.to_club) counts[t.to_club] = (counts[t.to_club] || 0) + 1;
+    });
+    const topClub = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+    document.getElementById('stat-active-club').textContent = topClub ? `${topClub[0]} (${topClub[1]})` : '–';
+
+    const strongest = allTransfers
+      .filter(t => t.strength)
+      .sort((a, b) => parseFloat(b.strength) - parseFloat(a.strength))[0];
+    document.getElementById('stat-top-strength').textContent = strongest
+      ? `${strongest.strength} – ${strongest.player}`
+      : '–';
+  }
+
   function render(){
     const search = document.getElementById('search').value.trim().toLowerCase();
     const posFilter = document.getElementById('filter-pos').value;
     const natFilter = document.getElementById('filter-nat').value;
+    const domesticOnly = document.getElementById('filter-domestic').checked;
 
     let filtered = rows.filter(t => {
       if(posFilter && t.pos !== posFilter) return false;
       if(natFilter && t.nationality !== natFilter) return false;
+      if(domesticOnly && !isDomestic(t)) return false;
       if(search){
         const hay = `${t.player} ${t.from_club} ${t.to_club}`.toLowerCase();
         if(!hay.includes(search)) return false;
@@ -442,12 +546,12 @@
     body.innerHTML = filtered.map(t => `
       <tr>
         <td class="date">${t.date || '–'}</td>
-        <td class="pos">${t.pos || '–'}</td>
-        <td class="player">${t.player || '–'}</td>
+        <td class="pos">${posBadge(t.pos)}</td>
+        <td class="player">${starPrefix(t)}${t.player || '–'}</td>
         <td>${t.nationality || '–'}</td>
         <td class="num">${t.strength || '–'}</td>
         <td class="num">${t.age ?? '–'}</td>
-        <td class="route"><b>${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${t.to_club || '?'}</b></td>
+        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b></td>
       </tr>
     `).join('');
   }
@@ -474,6 +578,15 @@
     console.error('Konnte data.json nicht laden:', e);
   }
 
+  let clubsList = [];
+  try{
+    const resClubsEarly = await fetch('clubs.json', { cache: 'no-store' });
+    clubsList = await resClubsEarly.json();
+    niClubNames = new Set(clubsList.map(c => c.name));
+  }catch(e){
+    console.error('Konnte clubs.json nicht laden:', e);
+  }
+
   fillTicker(rows);
   populateFilters(rows);
   updateStats(rows);
@@ -481,6 +594,32 @@
 
   // --- Kaderveränderungen (zweite Tabelle) ---
   let kaderChanges = [];
+
+  function renderKaderChanges(){
+    const domesticOnly = document.getElementById('filter-domestic').checked;
+    const body = document.getElementById('kader-changes-body');
+    const empty = document.getElementById('kader-changes-empty');
+    const filtered = domesticOnly ? kaderChanges.filter(isDomestic) : kaderChanges;
+    if(!filtered.length){
+      body.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    const sorted = [...filtered].sort((a,b) => parseDate(b.date) - parseDate(a.date));
+    body.innerHTML = sorted.map(t => `
+      <tr>
+        <td class="date">${t.date || '–'}</td>
+        <td class="pos">${posBadge(t.pos)}</td>
+        <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+        <td>${t.nationality || '–'}</td>
+        <td class="num">${t.strength || '–'}</td>
+        <td class="num">${t.age ?? '–'}</td>
+        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b></td>
+      </tr>
+    `).join('');
+  }
+
   try{
     const res2 = await fetch('kader_changes.json', { cache: 'no-store' });
     const rawChanges = await res2.json();
@@ -500,53 +639,36 @@
       }
       return enriched;
     });
-
-    const body = document.getElementById('kader-changes-body');
-    const empty = document.getElementById('kader-changes-empty');
-    if(!kaderChanges.length){
-      empty.style.display = 'block';
-    }else{
-      empty.style.display = 'none';
-      const sorted = [...kaderChanges].sort((a,b) => parseDate(b.date) - parseDate(a.date));
-      body.innerHTML = sorted.map(t => `
-        <tr>
-          <td class="date">${t.date || '–'}</td>
-          <td class="pos">${t.pos || '–'}</td>
-          <td class="player">${t.player || '–'}</td>
-          <td>${t.nationality || '–'}</td>
-          <td class="num">${t.strength || '–'}</td>
-          <td class="num">${t.age ?? '–'}</td>
-          <td class="route"><b>${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${t.to_club || '?'}</b></td>
-        </tr>
-      `).join('');
-    }
+    renderKaderChanges();
   }catch(e){
     console.error('Konnte kader_changes.json nicht laden:', e);
     document.getElementById('kader-changes-empty').style.display = 'block';
   }
 
+  document.getElementById('filter-domestic').addEventListener('change', () => {
+    render();
+    renderKaderChanges();
+  });
+
+  // Beide Datenquellen kombinieren, Duplikate (gleicher Spieler+Datum+Route) rausfiltern
+  const seenTransfer = new Set();
+  const allTransfers = [...rows, ...kaderChanges].filter(t => {
+    const key = `${t.player_id || t.player}-${t.date}-${t.from_club}-${t.to_club}`;
+    if(seenTransfer.has(key)) return false;
+    seenTransfer.add(key);
+    return true;
+  });
+  updateExtraStats(allTransfers);
+
   // --- Vereins-Ansicht: Zugänge links, Abgänge rechts ---
   try{
-    const resClubs = await fetch('clubs.json', { cache: 'no-store' });
-    const clubs = await resClubs.json();
     const select = document.getElementById('club-select');
-    clubs
+    clubsList
       .slice()
       .sort((a, b) => a.name.localeCompare(b.name, 'de'))
       .forEach(c => select.insertAdjacentHTML('beforeend', `<option value="${c.name}">${c.name}</option>`));
 
-    // Beide Datenquellen kombinieren, Duplikate (gleicher Spieler+Datum+Route) rausfiltern
-    const combined = [...rows, ...kaderChanges];
-    const seen = new Set();
-    const allTransfers = combined.filter(t => {
-      const key = `${t.player_id || t.player}-${t.date}-${t.from_club}-${t.to_club}`;
-      if(seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-
-    select.addEventListener('change', () => {
-      const club = select.value;
+    function showClub(club){
       const columns = document.getElementById('club-columns');
       const noneSelected = document.getElementById('club-none-selected');
 
@@ -575,8 +697,8 @@
         inBody.innerHTML = incoming.map(t => `
           <tr>
             <td class="date">${t.date || '–'}</td>
-            <td class="player">${t.player || '–'}</td>
-            <td class="route">${t.from_club || '?'}</td>
+            <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+            <td class="route">${crestImg(t.from_club_id)}${t.from_club || '?'}</td>
           </tr>
         `).join('');
       }
@@ -591,14 +713,30 @@
         outBody.innerHTML = outgoing.map(t => `
           <tr>
             <td class="date">${t.date || '–'}</td>
-            <td class="player">${t.player || '–'}</td>
-            <td class="route">${t.to_club || '?'}</td>
+            <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+            <td class="route">${crestImg(t.to_club_id)}${t.to_club || '?'}</td>
           </tr>
         `).join('');
       }
+    }
+
+    select.addEventListener('change', () => {
+      const club = select.value;
+      showClub(club);
+      // Teilbaren Link aktualisieren, ohne die Seite neu zu laden
+      const url = new URL(location.href);
+      if(club){ url.searchParams.set('verein', club); } else { url.searchParams.delete('verein'); }
+      history.replaceState(null, '', url);
     });
+
+    // Falls die Seite mit ?verein=... aufgerufen wurde, direkt diesen Verein anzeigen
+    const preselected = new URLSearchParams(location.search).get('verein');
+    if(preselected && clubsList.some(c => c.name === preselected)){
+      select.value = preselected;
+      showClub(preselected);
+    }
   }catch(e){
-    console.error('Konnte clubs.json nicht laden:', e);
+    console.error('Fehler beim Aufbau der Vereins-Ansicht:', e);
   }
 })();
 </script>
