@@ -394,7 +394,7 @@
       <h3 style="font-family:'Space Grotesk',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:var(--pitch); border-bottom:2px solid var(--pitch); padding-bottom:0.4rem; margin:0 0 0.6rem;">Zugänge</h3>
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Datum</th><th>Spieler</th><th>Von</th></tr></thead>
+          <thead><tr><th>Datum</th><th>Spieler</th><th>Stärke</th><th>Alter</th><th>Von</th></tr></thead>
           <tbody id="club-in-body"></tbody>
         </table>
       </div>
@@ -404,7 +404,7 @@
       <h3 style="font-family:'Space Grotesk',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold); border-bottom:2px solid var(--gold); padding-bottom:0.4rem; margin:0 0 0.6rem;">Abgänge</h3>
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Datum</th><th>Spieler</th><th>Nach</th></tr></thead>
+          <thead><tr><th>Datum</th><th>Spieler</th><th>Stärke</th><th>Alter</th><th>Nach</th></tr></thead>
           <tbody id="club-out-body"></tbody>
         </table>
       </div>
@@ -698,6 +698,8 @@
           <tr>
             <td class="date">${t.date || '–'}</td>
             <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+            <td class="num">${t.strength || '–'}</td>
+            <td class="num">${t.age ?? '–'}</td>
             <td class="route">${crestImg(t.from_club_id)}${t.from_club || '?'}</td>
           </tr>
         `).join('');
@@ -714,6 +716,8 @@
           <tr>
             <td class="date">${t.date || '–'}</td>
             <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+            <td class="num">${t.strength || '–'}</td>
+            <td class="num">${t.age ?? '–'}</td>
             <td class="route">${crestImg(t.to_club_id)}${t.to_club || '?'}</td>
           </tr>
         `).join('');
