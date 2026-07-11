@@ -1,0 +1,42 @@
+name: Nordirland Transfers aktualisieren
+
+on:
+  schedule:
+    - cron: '5 23 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests beautifulsoup4
+
+      - name: Transferliste scrapen
+        run: python scrape.py
+
+      - name: Alle 20 Kader abgleichen
+        run: python scrape_kader.py
+
+      - name: Änderungen committen
+        run: |
+          git config user.name "nordirland-transfer-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data.json kader_latest.json kader_changes.json
+          if ! git diff --staged --quiet; then
+            git commit -m "Transferdaten aktualisiert"
+            git push
+          else
+            echo "Keine Änderungen."
+          fi
