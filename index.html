@@ -9,15 +9,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --pitch: #143A2C;
-    --pitch-light: #1F5A42;
-    --parchment: #F3EEDF;
-    --parchment-dim: #E9E2CC;
-    --ink: #1A2420;
-    --ink-soft: #4B5750;
-    --gold: #C8973F;
-    --gold-soft: #E4C481;
-    --line: #D8CFB2;
+    --pitch: #0C7C3D;
+    --pitch-light: #129651;
+    --parchment: #FFFFFF;
+    --parchment-dim: #EAF5EE;
+    --ink: #0B211A;
+    --ink-soft: #4F5F58;
+    --gold: #D6252F;
+    --gold-soft: #FFFFFF;
+    --line: #D7E8DC;
   }
 
   * { box-sizing: border-box; }
@@ -57,7 +57,7 @@
     color: var(--gold-soft);
     letter-spacing: 0.02em;
     padding: 0 2.2rem;
-    border-right: 1px solid rgba(200,151,63,0.35);
+    border-right: 1px solid rgba(255,255,255,0.35);
   }
   @keyframes scroll-left{
     from{ transform: translateX(0); }
@@ -195,8 +195,8 @@
     border-top: 1px solid var(--parchment-dim);
     transition: background 0.12s ease;
   }
-  tbody tr:nth-child(even){ background: #FBF8EF; }
-  tbody tr:hover{ background: #F3E6C8; }
+  tbody tr:nth-child(even){ background: #F3FBF6; }
+  tbody tr:hover{ background: #E1F4E8; }
 
   td{
     padding: 0.65rem 0.9rem;
@@ -240,6 +240,11 @@
     line-height: 1.6;
   }
   footer a{ color: var(--pitch); }
+
+  #club-columns{ display:none; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  @media (max-width: 640px){
+    #club-columns{ grid-template-columns: 1fr; }
+  }
 
   :focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
 </style>
@@ -297,178 +302,4 @@
 <main style="margin-top: -1rem;">
   <p class="eyebrow" style="margin-bottom: 0.3rem;">Lückenloser Abgleich</p>
   <h2 style="font-family:'Fraunces',serif; font-weight:600; font-size:1.5rem; color:var(--pitch); margin: 0 0 0.4rem;">Alle Kaderveränderungen</h2>
-  <p class="subtitle" style="margin-bottom:1rem;">Täglicher Vergleich der Kader aller 20 Premiership-Vereine &ndash; erkennt jeden Zu- und Abgang, unabhängig davon, wie viele Transfers an einem Tag passieren. Wechsel außerhalb der Nordirland-1 (Ausland, andere Liga) werden als "außerhalb Nordirland-1" markiert, da dort kein Kader mitverglichen wird.</p>
-  <div class="table-scroll">
-    <table id="kader-changes-table">
-      <thead>
-        <tr>
-          <th data-key2="date">Datum</th>
-          <th data-key2="pos">Pos.</th>
-          <th data-key2="player">Spieler</th>
-          <th data-key2="nationality">Nat.</th>
-          <th data-key2="strength">Stärke</th>
-          <th data-key2="age">Alter</th>
-          <th data-key2="from_club">Von &rarr; Nach</th>
-        </tr>
-      </thead>
-      <tbody id="kader-changes-body"></tbody>
-    </table>
-  </div>
-  <div class="empty-state" id="kader-changes-empty" style="display:none;">Noch keine Kaderveränderungen erfasst. Nach dem zweiten Lauf des Bots erscheinen hier Daten.</div>
-</main>
-
-<footer>
-  Datenquelle: <a href="https://www.anstoss-online.de/?do=land&land_id=240" target="_blank" rel="noopener">anstoss-online.de &ndash; Länderseite Nordirland</a>.
-  Diese Seite ist ein inoffizielles Community-Projekt und aktualisiert sich automatisch einmal nachts.
-</footer>
-
-<script>
-(async function(){
-  let rows = [];
-  let sortKey = 'date';
-  let sortDir = -1; // neueste zuerst
-
-  function parseDate(d){
-    if(!d) return new Date(0);
-    const [day, month, year] = d.split('.').map(Number);
-    return new Date(year, month - 1, day);
-  }
-
-  function fillTicker(data){
-    const el = document.getElementById('ticker');
-    if(!data.length){ el.innerHTML = '<span>Noch keine Transfers erfasst.</span>'; return; }
-    const items = data.slice(0, 12).map(t =>
-      `<span>${t.date} &nbsp;&bull;&nbsp; ${t.player} (${t.strength || '–'}) &nbsp;${t.from_club} &rarr; ${t.to_club}</span>`
-    );
-    // doppelt, damit die Schleife nahtlos wirkt
-    el.innerHTML = items.join('') + items.join('');
-  }
-
-  function populateFilters(data){
-    const posSel = document.getElementById('filter-pos');
-    const natSel = document.getElementById('filter-nat');
-    const positions = [...new Set(data.map(t => t.pos).filter(Boolean))].sort();
-    const nats = [...new Set(data.map(t => t.nationality).filter(Boolean))].sort();
-    positions.forEach(p => posSel.insertAdjacentHTML('beforeend', `<option value="${p}">${p}</option>`));
-    nats.forEach(n => natSel.insertAdjacentHTML('beforeend', `<option value="${n}">${n}</option>`));
-  }
-
-  function updateStats(data){
-    document.getElementById('stat-total').textContent = data.length;
-    const clubs = new Set();
-    data.forEach(t => { if(t.from_club) clubs.add(t.from_club); if(t.to_club) clubs.add(t.to_club); });
-    document.getElementById('stat-clubs').textContent = clubs.size;
-    const latest = data.reduce((acc, t) => {
-      const d = parseDate(t.date);
-      return d > acc ? d : acc;
-    }, new Date(0));
-    document.getElementById('stat-updated').textContent = latest.getTime() > 0
-      ? latest.toLocaleDateString('de-DE')
-      : '–';
-  }
-
-  function render(){
-    const search = document.getElementById('search').value.trim().toLowerCase();
-    const posFilter = document.getElementById('filter-pos').value;
-    const natFilter = document.getElementById('filter-nat').value;
-
-    let filtered = rows.filter(t => {
-      if(posFilter && t.pos !== posFilter) return false;
-      if(natFilter && t.nationality !== natFilter) return false;
-      if(search){
-        const hay = `${t.player} ${t.from_club} ${t.to_club}`.toLowerCase();
-        if(!hay.includes(search)) return false;
-      }
-      return true;
-    });
-
-    filtered.sort((a, b) => {
-      let va = a[sortKey], vb = b[sortKey];
-      if(sortKey === 'date'){ va = parseDate(a.date); vb = parseDate(b.date); }
-      if(sortKey === 'strength' || sortKey === 'age'){ va = parseFloat(va) || 0; vb = parseFloat(vb) || 0; }
-      if(va < vb) return -1 * sortDir;
-      if(va > vb) return 1 * sortDir;
-      return 0;
-    });
-
-    const body = document.getElementById('table-body');
-    const empty = document.getElementById('empty-state');
-    if(!filtered.length){
-      body.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-
-    body.innerHTML = filtered.map(t => `
-      <tr>
-        <td class="date">${t.date || '–'}</td>
-        <td class="pos">${t.pos || '–'}</td>
-        <td class="player">${t.player || '–'}</td>
-        <td>${t.nationality || '–'}</td>
-        <td class="num">${t.strength || '–'}</td>
-        <td class="num">${t.age ?? '–'}</td>
-        <td class="route"><b>${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${t.to_club || '?'}</b></td>
-      </tr>
-    `).join('');
-  }
-
-  document.querySelectorAll('thead th').forEach(th => {
-    th.addEventListener('click', () => {
-      const key = th.dataset.key;
-      if(sortKey === key){ sortDir *= -1; } else { sortKey = key; sortDir = 1; }
-      document.querySelectorAll('thead th .arrow').forEach(a => a.remove());
-      th.insertAdjacentHTML('beforeend', `<span class="arrow">${sortDir === 1 ? '▲' : '▼'}</span>`);
-      render();
-    });
-  });
-
-  document.getElementById('search').addEventListener('input', render);
-  document.getElementById('filter-pos').addEventListener('change', render);
-  document.getElementById('filter-nat').addEventListener('change', render);
-
-  try{
-    const res = await fetch('data.json', { cache: 'no-store' });
-    rows = await res.json();
-  }catch(e){
-    rows = [];
-    console.error('Konnte data.json nicht laden:', e);
-  }
-
-  fillTicker(rows);
-  populateFilters(rows);
-  updateStats(rows);
-  render();
-
-  // --- Kaderveränderungen (zweite Tabelle) ---
-  try{
-    const res2 = await fetch('kader_changes.json', { cache: 'no-store' });
-    const changes = await res2.json();
-    const body = document.getElementById('kader-changes-body');
-    const empty = document.getElementById('kader-changes-empty');
-    if(!changes.length){
-      empty.style.display = 'block';
-    }else{
-      empty.style.display = 'none';
-      const sorted = [...changes].sort((a,b) => parseDate(b.date) - parseDate(a.date));
-      body.innerHTML = sorted.map(t => `
-        <tr>
-          <td class="date">${t.date || '–'}</td>
-          <td class="pos">${t.pos || '–'}</td>
-          <td class="player">${t.player || '–'}</td>
-          <td>${t.nationality || '–'}</td>
-          <td class="num">${t.strength || '–'}</td>
-          <td class="num">${t.age ?? '–'}</td>
-          <td class="route"><b>${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${t.to_club || '?'}</b></td>
-        </tr>
-      `).join('');
-    }
-  }catch(e){
-    console.error('Konnte kader_changes.json nicht laden:', e);
-    document.getElementById('kader-changes-empty').style.display = 'block';
-  }
-})();
-</script>
-
-</body>
-</html>
+  <p class="subtitle" style="margin-bottom:1rem;">Täglicher
