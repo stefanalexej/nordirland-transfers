@@ -116,6 +116,7 @@ def main() -> int:
     print(f"Lade Kader für {len(clubs)} Vereine ...")
     session = requests.Session()
     session.headers.update(HEADERS)
+    today = datetime.now(timezone.utc).strftime("%d.%m.%Y")
 
     current_snapshot = {}
     for club in clubs:
@@ -158,7 +159,6 @@ def main() -> int:
             if pid not in curr_players:
                 left[pid] = (club_id, info)
 
-    today = datetime.now(timezone.utc).strftime("%d.%m.%Y")
     changes = load_json(CHANGES_FILE, [])
     existing_ids = {c["id"] for c in changes}
 
