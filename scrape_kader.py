@@ -18,6 +18,7 @@ auf, ohne vorher bei einem der 20 gewesen zu sein, kam er von außerhalb
 import json
 import os
 import re
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -28,7 +29,13 @@ CLUBS_FILE = os.path.join(BASE_DIR, "clubs.json")
 SNAPSHOT_FILE = os.path.join(BASE_DIR, "kader_latest.json")
 CHANGES_FILE = os.path.join(BASE_DIR, "kader_changes.json")
 
-HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; NordirlandTransferBot/1.0)"}
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Connection": "keep-alive",
+}
 KADER_URL = "https://www.anstoss-online.de/?do=verein&verein_id={id}&detail=kader"
 
 
@@ -37,8 +44,8 @@ def load_clubs():
         return json.load(f)
 
 
-def fetch_kader(club_id: str) -> list[dict]:
-    resp = requests.get(KADER_URL.format(id=club_id), headers=HEADERS, timeout=30)
+def fetch_kader(session: requests.Session, club_id: str) -> list[dict]:
+    resp = session.get(KADER_URL.format(id=club_id), timeout=30)
     resp.raise_for_status()
     resp.encoding = resp.apparent_encoding or "utf-8"
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -107,15 +114,19 @@ def main() -> int:
     club_names = {c["id"]: c["name"] for c in clubs}
 
     print(f"Lade Kader für {len(clubs)} Vereine ...")
+    session = requests.Session()
+    session.headers.update(HEADERS)
+
     current_snapshot = {}
     for club in clubs:
         try:
-            players = fetch_kader(club["id"])
+            players = fetch_kader(session, club["id"])
         except requests.RequestException as e:
             print(f"  Fehler bei {club['name']} ({club['id']}): {e}")
             continue
         current_snapshot[club["id"]] = players
         print(f"  {club['name']}: {len(players)} Spieler")
+        time.sleep(1.5)  # kleine Pause, damit es nicht wie ein Bot-Sturm aussieht
 
     previous = load_json(SNAPSHOT_FILE, {"date": None, "clubs": {}})
     previous_clubs = previous.get("clubs", {})
