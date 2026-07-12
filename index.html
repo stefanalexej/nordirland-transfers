@@ -250,6 +250,13 @@
     letter-spacing: 0.03em;
     vertical-align: middle;
   }
+  a.player-link, a.club-link{
+    color: inherit;
+    text-decoration: none;
+  }
+  a.player-link:hover, a.club-link:hover{
+    text-decoration: underline;
+  }
   td.route{
     font-size: 13px;
     color: var(--ink-soft);
@@ -474,6 +481,16 @@
   function loanBadge(t){
     return t.is_loan === true ? '<span class="loan-badge" title="Leihe">Leihe</span>' : '';
   }
+  function playerLink(t){
+    if(!t.player) return '–';
+    if(!t.player_id) return t.player;
+    return `<a class="player-link" href="https://www.anstoss-online.de/?do=spieler&spieler_id=${t.player_id}" target="_blank" rel="noopener">${t.player}</a>`;
+  }
+  function clubLink(name, id){
+    if(!name) return '?';
+    if(!id) return name;
+    return `<a class="club-link" href="https://www.anstoss-online.de/?do=verein&verein_id=${id}" target="_blank" rel="noopener">${name}</a>`;
+  }
 
   function fillTicker(data){
     const el = document.getElementById('ticker');
@@ -564,11 +581,11 @@
       <tr>
         <td class="date">${t.date || '–'}</td>
         <td class="pos">${posBadge(t.pos)}</td>
-        <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+        <td class="player">${starPrefix(t)}${playerLink(t)}</td>
         <td>${t.nationality || '–'}</td>
         <td class="num">${t.strength || '–'}</td>
         <td class="num">${t.age ?? '–'}</td>
-        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b>${loanBadge(t)}</td>
+        <td class="route"><b>${crestImg(t.from_club_id)}${clubLink(t.from_club, t.from_club_id)}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${clubLink(t.to_club, t.to_club_id)}</b>${loanBadge(t)}</td>
       </tr>
     `).join('');
   }
@@ -628,11 +645,11 @@
       <tr>
         <td class="date">${t.date || '–'}</td>
         <td class="pos">${posBadge(t.pos)}</td>
-        <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+        <td class="player">${starPrefix(t)}${playerLink(t)}</td>
         <td>${t.nationality || '–'}</td>
         <td class="num">${t.strength || '–'}</td>
         <td class="num">${t.age ?? '–'}</td>
-        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b>${loanBadge(t)}</td>
+        <td class="route"><b>${crestImg(t.from_club_id)}${clubLink(t.from_club, t.from_club_id)}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${clubLink(t.to_club, t.to_club_id)}</b>${loanBadge(t)}</td>
       </tr>
     `).join('');
   }
@@ -714,10 +731,10 @@
         inBody.innerHTML = incoming.map(t => `
           <tr>
             <td class="date">${t.date || '–'}</td>
-            <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+            <td class="player">${starPrefix(t)}${playerLink(t)}</td>
             <td class="num">${t.strength || '–'}</td>
             <td class="num">${t.age ?? '–'}</td>
-            <td class="route">${crestImg(t.from_club_id)}${t.from_club || '?'}${loanBadge(t)}</td>
+            <td class="route">${crestImg(t.from_club_id)}${clubLink(t.from_club, t.from_club_id)}${loanBadge(t)}</td>
           </tr>
         `).join('');
       }
@@ -732,10 +749,10 @@
         outBody.innerHTML = outgoing.map(t => `
           <tr>
             <td class="date">${t.date || '–'}</td>
-            <td class="player">${starPrefix(t)}${t.player || '–'}</td>
+            <td class="player">${starPrefix(t)}${playerLink(t)}</td>
             <td class="num">${t.strength || '–'}</td>
             <td class="num">${t.age ?? '–'}</td>
-            <td class="route">${crestImg(t.to_club_id)}${t.to_club || '?'}${loanBadge(t)}</td>
+            <td class="route">${crestImg(t.to_club_id)}${clubLink(t.to_club, t.to_club_id)}${loanBadge(t)}</td>
           </tr>
         `).join('');
       }
