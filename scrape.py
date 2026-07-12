@@ -12,6 +12,7 @@ import json
 import os
 import re
 import sys
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -32,13 +33,6 @@ HEADERS = {
 
 DATE_RE = re.compile(r"\d{2}\.\d{2}\.\d{4}")
 STRENGTH_RE = re.compile(r"^\d\.\d$")
-
-
-def fetch_html() -> str:
-    resp = requests.get(URL, headers=HEADERS, timeout=30)
-    resp.raise_for_status()
-    resp.encoding = resp.apparent_encoding or "utf-8"
-    return resp.text
 
 
 def find_transfer_table(soup: BeautifulSoup):
@@ -132,6 +126,53 @@ def parse_transfers(html: str) -> list[dict]:
     return transfers
 
 
+def fetch_loan_status(session: requests.Session, player_id: str, club_id: str, date_str: str):
+    """Prüft im Spielerprofil (Tabelle "Bisherige Stationen"), ob der Stint
+    bei club_id ab date_str als Leihe markiert ist. Gibt True/False zurück,
+    oder None, wenn sich die passende Zeile nicht eindeutig finden lässt
+    (z.B. bei abweichendem Startdatum)."""
+    if not player_id or not club_id:
+        return None
+    try:
+        resp = session.get(
+            f"https://www.anstoss-online.de/?do=spieler&spieler_id={player_id}",
+            timeout=20,
+        )
+        resp.raise_for_status()
+        resp.encoding = resp.apparent_encoding or "utf-8"
+        soup = BeautifulSoup(resp.text, "html.parser")
+    except requests.RequestException:
+        return None
+
+    keywords = {"verein", "ab", "bis", "einsätze", "leihe"}
+    table = None
+    for t in soup.find_all("table"):
+        header_cells = t.find_all(["th", "td"], limit=10)
+        header_text = " ".join(c.get_text(strip=True).lower() for c in header_cells)
+        if sum(1 for kw in keywords if kw in header_text) >= 3:
+            table = t
+            break
+    if table is None:
+        return None
+
+    for row in table.find_all("tr"):
+        cells = row.find_all("td")
+        if len(cells) < 6:
+            continue
+        club_link = cells[0].find("a", href=re.compile(r"do=verein"))
+        if not club_link:
+            continue
+        row_club_id_m = re.search(r"verein_id=(\d+)", club_link.get("href", ""))
+        if not row_club_id_m or row_club_id_m.group(1) != str(club_id):
+            continue
+        ab_date = cells[1].get_text(strip=True)
+        if ab_date != date_str:
+            continue
+        leihe_text = cells[5].get_text(strip=True)
+        return bool(leihe_text)
+    return None
+
+
 def load_existing() -> list[dict]:
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -145,8 +186,14 @@ def save(transfers: list[dict]) -> None:
 
 
 def main() -> int:
+    session = requests.Session()
+    session.headers.update(HEADERS)
+
     try:
-        html = fetch_html()
+        resp = session.get(URL, timeout=30)
+        resp.raise_for_status()
+        resp.encoding = resp.apparent_encoding or "utf-8"
+        html = resp.text
     except requests.RequestException as e:
         print(f"Fehler beim Abrufen der Seite: {e}", file=sys.stderr)
         return 1
@@ -161,6 +208,8 @@ def main() -> int:
     new_count = 0
     for t in scraped:
         if t["id"] not in existing_ids:
+            time.sleep(1)  # kleine Pause vor dem Extra-Request zum Spielerprofil
+            t["is_loan"] = fetch_loan_status(session, t["player_id"], t["to_club_id"], t["date"])
             existing.append(t)
             existing_ids.add(t["id"])
             new_count += 1

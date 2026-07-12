@@ -97,6 +97,51 @@ def fetch_kader(session: requests.Session, club_id: str) -> list[dict]:
     return players
 
 
+def fetch_loan_status(session: requests.Session, player_id: str, club_id: str, date_str: str):
+    """Prüft im Spielerprofil, ob der Stint bei club_id ab date_str als
+    Leihe markiert ist. True/False, oder None wenn nicht eindeutig zuordenbar."""
+    if not player_id or not club_id:
+        return None
+    try:
+        resp = session.get(
+            f"https://www.anstoss-online.de/?do=spieler&spieler_id={player_id}",
+            timeout=20,
+        )
+        resp.raise_for_status()
+        resp.encoding = resp.apparent_encoding or "utf-8"
+        soup = BeautifulSoup(resp.text, "html.parser")
+    except requests.RequestException:
+        return None
+
+    keywords = {"verein", "ab", "bis", "einsätze", "leihe"}
+    table = None
+    for t in soup.find_all("table"):
+        header_cells = t.find_all(["th", "td"], limit=10)
+        header_text = " ".join(c.get_text(strip=True).lower() for c in header_cells)
+        if sum(1 for kw in keywords if kw in header_text) >= 3:
+            table = t
+            break
+    if table is None:
+        return None
+
+    for row in table.find_all("tr"):
+        cells = row.find_all("td")
+        if len(cells) < 6:
+            continue
+        club_link = cells[0].find("a", href=re.compile(r"do=verein"))
+        if not club_link:
+            continue
+        row_club_id_m = re.search(r"verein_id=(\d+)", club_link.get("href", ""))
+        if not row_club_id_m or row_club_id_m.group(1) != str(club_id):
+            continue
+        ab_date = cells[1].get_text(strip=True)
+        if ab_date != date_str:
+            continue
+        leihe_text = cells[5].get_text(strip=True)
+        return bool(leihe_text)
+    return None
+
+
 def load_json(path, default):
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as f:
@@ -172,6 +217,11 @@ def main() -> int:
         if change_id in existing_ids:
             continue
 
+        is_loan = None
+        if to_club_id:
+            time.sleep(1)  # kleine Pause vor dem Extra-Request zum Spielerprofil
+            is_loan = fetch_loan_status(session, pid, to_club_id, today)
+
         changes.append({
             "id": change_id,
             "date": today,
@@ -185,6 +235,7 @@ def main() -> int:
             "from_club_id": from_club_id,
             "to_club": club_names.get(to_club_id, "außerhalb Nordirland-1" if to_club_id is None else to_club_id),
             "to_club_id": to_club_id,
+            "is_loan": is_loan,
             "detected_at": datetime.now(timezone.utc).isoformat(),
         })
         existing_ids.add(change_id)

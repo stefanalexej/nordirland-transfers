@@ -237,6 +237,19 @@
     margin-right: 3px;
     font-size: 12px;
   }
+  .loan-badge{
+    display: inline-block;
+    padding: 1px 6px;
+    margin-left: 6px;
+    border-radius: 3px;
+    background: #E7EEF7;
+    color: #2B4C7A;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    vertical-align: middle;
+  }
   td.route{
     font-size: 13px;
     color: var(--ink-soft);
@@ -320,6 +333,7 @@
     <span class="pos-badge mid">Mittelfeld</span>
     <span class="pos-badge att">Sturm</span>
     <span><span class="domestic-star">★</span> = beide Vereine aus Nordirland-1</span>
+    <span><span class="loan-badge" style="margin-left:0;">Leihe</span> = Leihgeschäft statt fester Transfer</span>
   </div>
 </header>
 
@@ -457,6 +471,9 @@
     if(!clubId) return '';
     return `<img class="crest" loading="lazy" alt="" src="https://www.anstoss-online.de/images/wappen/90/wappen${clubId}.png" onerror="this.style.display='none'">`;
   }
+  function loanBadge(t){
+    return t.is_loan === true ? '<span class="loan-badge" title="Leihe">Leihe</span>' : '';
+  }
 
   function fillTicker(data){
     const el = document.getElementById('ticker');
@@ -551,7 +568,7 @@
         <td>${t.nationality || '–'}</td>
         <td class="num">${t.strength || '–'}</td>
         <td class="num">${t.age ?? '–'}</td>
-        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b></td>
+        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b>${loanBadge(t)}</td>
       </tr>
     `).join('');
   }
@@ -615,7 +632,7 @@
         <td>${t.nationality || '–'}</td>
         <td class="num">${t.strength || '–'}</td>
         <td class="num">${t.age ?? '–'}</td>
-        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b></td>
+        <td class="route"><b>${crestImg(t.from_club_id)}${t.from_club || '?'}</b><span class="arrow-icon">&rarr;</span><b>${crestImg(t.to_club_id)}${t.to_club || '?'}</b>${loanBadge(t)}</td>
       </tr>
     `).join('');
   }
@@ -700,7 +717,7 @@
             <td class="player">${starPrefix(t)}${t.player || '–'}</td>
             <td class="num">${t.strength || '–'}</td>
             <td class="num">${t.age ?? '–'}</td>
-            <td class="route">${crestImg(t.from_club_id)}${t.from_club || '?'}</td>
+            <td class="route">${crestImg(t.from_club_id)}${t.from_club || '?'}${loanBadge(t)}</td>
           </tr>
         `).join('');
       }
@@ -718,7 +735,7 @@
             <td class="player">${starPrefix(t)}${t.player || '–'}</td>
             <td class="num">${t.strength || '–'}</td>
             <td class="num">${t.age ?? '–'}</td>
-            <td class="route">${crestImg(t.to_club_id)}${t.to_club || '?'}</td>
+            <td class="route">${crestImg(t.to_club_id)}${t.to_club || '?'}${loanBadge(t)}</td>
           </tr>
         `).join('');
       }
