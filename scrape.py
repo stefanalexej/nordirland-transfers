@@ -126,11 +126,13 @@ def parse_transfers(html: str) -> list[dict]:
     return transfers
 
 
-def fetch_loan_status(session: requests.Session, player_id: str, club_id: str, date_str: str):
-    """Prüft im Spielerprofil (Tabelle "Bisherige Stationen"), ob der Stint
-    bei club_id ab date_str als Leihe markiert ist. Gibt True/False zurück,
-    oder None, wenn sich die passende Zeile nicht eindeutig finden lässt
-    (z.B. bei abweichendem Startdatum)."""
+def fetch_loan_status(session: requests.Session, player_id: str, club_id: str):
+    """Prüft im Spielerprofil (Tabelle "Bisherige Stationen"), ob der
+    aktuelle Stint bei club_id als Leihe markiert ist. Da wir den Spieler
+    schon als neu bei diesem Verein erkannt haben (Kadervergleich bzw.
+    Transferliste), reicht es, die letzte Zeile mit diesem Verein zu nehmen -
+    kein Datumsabgleich nötig. Gibt True/False zurück, oder None, wenn der
+    Verein in der Tabelle gar nicht auftaucht."""
     if not player_id or not club_id:
         return None
     try:
@@ -155,6 +157,7 @@ def fetch_loan_status(session: requests.Session, player_id: str, club_id: str, d
     if table is None:
         return None
 
+    result = None
     for row in table.find_all("tr"):
         cells = row.find_all("td")
         if len(cells) < 6:
@@ -165,12 +168,11 @@ def fetch_loan_status(session: requests.Session, player_id: str, club_id: str, d
         row_club_id_m = re.search(r"verein_id=(\d+)", club_link.get("href", ""))
         if not row_club_id_m or row_club_id_m.group(1) != str(club_id):
             continue
-        ab_date = cells[1].get_text(strip=True)
-        if ab_date != date_str:
-            continue
+        # Letzte passende Zeile gewinnt (Tabelle ist chronologisch, die
+        # aktuellste Station zu diesem Verein steht also weiter unten).
         leihe_text = cells[5].get_text(strip=True)
-        return bool(leihe_text)
-    return None
+        result = bool(leihe_text)
+    return result
 
 
 def load_existing() -> list[dict]:
@@ -209,7 +211,7 @@ def main() -> int:
     for t in scraped:
         if t["id"] not in existing_ids:
             time.sleep(1)  # kleine Pause vor dem Extra-Request zum Spielerprofil
-            t["is_loan"] = fetch_loan_status(session, t["player_id"], t["to_club_id"], t["date"])
+            t["is_loan"] = fetch_loan_status(session, t["player_id"], t["to_club_id"])
             existing.append(t)
             existing_ids.add(t["id"])
             new_count += 1
