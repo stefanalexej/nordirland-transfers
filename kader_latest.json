@@ -1,5 +1,5 @@
 {
-  "date": "12.07.2026",
+  "date": "13.07.2026",
   "clubs": {
     "4661": [
       {
@@ -1101,14 +1101,6 @@
         "nationality": "Nordirland"
       },
       {
-        "player_id": "147452",
-        "player": "Chris Alsop",
-        "pos": "ZM",
-        "strength": "5.0",
-        "age": 30,
-        "nationality": "Nordirland"
-      },
-      {
         "player_id": "182425",
         "player": "Milan Kurzmann",
         "pos": "ZM",
@@ -1255,14 +1247,6 @@
         "nationality": "Schweiz"
       },
       {
-        "player_id": "103169",
-        "player": "AntĂłnio JuliĂŁo",
-        "pos": "ZM",
-        "strength": "8.0",
-        "age": 34,
-        "nationality": "Portugal"
-      },
-      {
         "player_id": "172822",
         "player": "Raimonds Kostjuks",
         "pos": "ZM",
@@ -1399,6 +1383,14 @@
         "strength": "5.7",
         "age": 23,
         "nationality": "Nordirland"
+      },
+      {
+        "player_id": "168418",
+        "player": "Nestor Jasseng",
+        "pos": "LV RV",
+        "strength": "5.1",
+        "age": 23,
+        "nationality": "Schweiz"
       },
       {
         "player_id": "159098",
@@ -2121,6 +2113,14 @@
         "nationality": "Nordirland"
       },
       {
+        "player_id": "190188",
+        "player": "Geofram Abbott",
+        "pos": "TW",
+        "strength": "2.6",
+        "age": 17,
+        "nationality": "Nordirland"
+      },
+      {
         "player_id": "147972",
         "player": "Martin Wutscher",
         "pos": "LIB",
@@ -2207,14 +2207,6 @@
         "strength": "6.6",
         "age": 25,
         "nationality": "Nordirland"
-      },
-      {
-        "player_id": "162647",
-        "player": "Richard Physick",
-        "pos": "ZM",
-        "strength": "5.9",
-        "age": 23,
-        "nationality": "Wales"
       },
       {
         "player_id": "161122",
@@ -2329,6 +2321,14 @@
         "strength": "5.9",
         "age": 34,
         "nationality": "Kuba"
+      },
+      {
+        "player_id": "175761",
+        "player": "Vitaly Oleg",
+        "pos": "MD",
+        "strength": "5.0",
+        "age": 20,
+        "nationality": "Russland"
       },
       {
         "player_id": "142061",
@@ -2885,7 +2885,7 @@
         "player": "James Schadendorf",
         "pos": "RM",
         "strength": "3.4",
-        "age": 23,
+        "age": 24,
         "nationality": "Nordirland"
       },
       {
@@ -2945,6 +2945,14 @@
         "strength": "8.0",
         "age": 32,
         "nationality": "Deutschland"
+      },
+      {
+        "player_id": "139362",
+        "player": "Moeneeb Josephs",
+        "pos": "TW",
+        "strength": "5.8",
+        "age": 34,
+        "nationality": "SĂĽdafrika"
       },
       {
         "player_id": "118517",
@@ -3027,6 +3035,14 @@
         "nationality": "Andorra"
       },
       {
+        "player_id": "182196",
+        "player": "Bart Goor",
+        "pos": "RM",
+        "strength": "6.7",
+        "age": 21,
+        "nationality": "Belgien"
+      },
+      {
         "player_id": "116282",
         "player": "Michael Utermann",
         "pos": "RM",
@@ -3087,7 +3103,7 @@
         "player": "Paul Billett",
         "pos": "ST",
         "strength": "7.4",
-        "age": 36,
+        "age": 37,
         "nationality": "Schottland"
       },
       {
@@ -3257,7 +3273,7 @@
         "player": "Gert Weyenberg",
         "pos": "ZM",
         "strength": "6.1",
-        "age": 25,
+        "age": 26,
         "nationality": "Belgien"
       },
       {
