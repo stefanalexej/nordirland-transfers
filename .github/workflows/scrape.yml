@@ -2,11 +2,14 @@ name: Nordirland Transfers aktualisieren
 
 on:
   schedule:
-    # 23:05 UTC = 01:05 Uhr deutsche Sommerzeit (kurz nach dem nächtlichen
-    # AO-Reset um 0:01 Uhr). GitHub Actions kennt nur UTC, keine Zeitzonen -
-    # im Winter (CET statt CEST) läuft der Job dann um 00:05 Uhr statt 01:05.
-    # Das ist unkritisch, Hauptsache "nach dem Reset".
+    # 4 Läufe am Tag, je 5 Vereine (siehe select_clubs_for_this_run in
+    # scrape_kader.py) - falls eine GitHub-Adresse gerade schlecht
+    # angesehen wird, sind nur 5 statt 20 Vereine betroffen, und der
+    # nächste Lauf (neue Adresse) hat wieder eine faire Chance.
     - cron: '5 23 * * *'
+    - cron: '5 5 * * *'
+    - cron: '5 11 * * *'
+    - cron: '5 17 * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -32,10 +35,12 @@ jobs:
         run: python scrape.py
         continue-on-error: true
 
-      - name: Alle 20 Kader abgleichen
+      - name: Alle Vereine abgleichen (Kadergruppe je nach Uhrzeit)
         if: always()
         run: python scrape_kader.py
         continue-on-error: true
+        env:
+          FORCE_ALL_CLUBS: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
 
       - name: Änderungen committen
         if: always()
