@@ -2,6 +2,10 @@ name: Nordirland Transfers aktualisieren
 
 on:
   schedule:
+    # 23:05 UTC = 01:05 Uhr deutsche Sommerzeit (kurz nach dem nächtlichen
+    # AO-Reset um 0:01 Uhr). GitHub Actions kennt nur UTC, keine Zeitzonen -
+    # im Winter (CET statt CEST) läuft der Job dann um 00:05 Uhr statt 01:05.
+    # Das ist unkritisch, Hauptsache "nach dem Reset".
     - cron: '5 23 * * *'
   workflow_dispatch: {}
 
@@ -25,11 +29,15 @@ jobs:
 
       - name: Transferliste scrapen
         run: python scrape.py
+        continue-on-error: true
 
       - name: Alle 20 Kader abgleichen
+        if: always()
         run: python scrape_kader.py
+        continue-on-error: true
 
       - name: Änderungen committen
+        if: always()
         run: |
           git config user.name "nordirland-transfer-bot"
           git config user.email "actions@users.noreply.github.com"
