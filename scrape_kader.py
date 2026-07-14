@@ -44,9 +44,22 @@ def load_clubs():
         return json.load(f)
 
 
-def fetch_kader(session: requests.Session, club_id: str) -> list[dict]:
-    resp = session.get(KADER_URL.format(id=club_id), timeout=30)
-    resp.raise_for_status()
+def fetch_kader(session: requests.Session, club_id: str, attempts: int = 3, retry_delay: int = 15) -> list[dict]:
+    last_error = None
+    resp = None
+    for attempt in range(1, attempts + 1):
+        try:
+            resp = session.get(KADER_URL.format(id=club_id), timeout=30)
+            resp.raise_for_status()
+            break
+        except requests.RequestException as e:
+            last_error = e
+            print(f"  Versuch {attempt}/{attempts} fehlgeschlagen: {e}")
+            if attempt < attempts:
+                time.sleep(retry_delay)
+    if resp is None:
+        raise last_error
+
     resp.encoding = resp.apparent_encoding or "utf-8"
     soup = BeautifulSoup(resp.text, "html.parser")
 

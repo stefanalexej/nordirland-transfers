@@ -187,17 +187,33 @@ def save(transfers: list[dict]) -> None:
         json.dump(transfers, f, ensure_ascii=False, indent=2)
 
 
+def fetch_with_retry(session: requests.Session, url: str, attempts: int = 3, delay: int = 15, timeout: int = 30):
+    """Versucht eine Seite mehrfach abzurufen, bevor aufgegeben wird -
+    Verbindungs-Timeouts sind bei dieser Seite gelegentlich normal und meist
+    nach einer kurzen Pause wieder weg."""
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            resp = session.get(url, timeout=timeout)
+            resp.raise_for_status()
+            resp.encoding = resp.apparent_encoding or "utf-8"
+            return resp.text
+        except requests.RequestException as e:
+            last_error = e
+            print(f"Versuch {attempt}/{attempts} fehlgeschlagen: {e}", file=sys.stderr)
+            if attempt < attempts:
+                time.sleep(delay)
+    raise last_error
+
+
 def main() -> int:
     session = requests.Session()
     session.headers.update(HEADERS)
 
     try:
-        resp = session.get(URL, timeout=30)
-        resp.raise_for_status()
-        resp.encoding = resp.apparent_encoding or "utf-8"
-        html = resp.text
+        html = fetch_with_retry(session, URL)
     except requests.RequestException as e:
-        print(f"Fehler beim Abrufen der Seite: {e}", file=sys.stderr)
+        print(f"Fehler beim Abrufen der Seite nach mehreren Versuchen: {e}", file=sys.stderr)
         return 1
 
     scraped = parse_transfers(html)
