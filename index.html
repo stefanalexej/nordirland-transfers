@@ -437,6 +437,16 @@
       </div>
       <div class="empty-state" id="club-out-empty" style="display:none;">Keine Abgänge erfasst.</div>
     </div>
+    <div style="grid-column: 1 / -1;">
+      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:#2B4C7A; border-bottom:2px solid #2B4C7A; padding-bottom:0.4rem; margin:1.4rem 0 0.6rem;">Aktuell ausgeliehen (im Kader)</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Spieler</th><th>Pos.</th><th>Stärke</th><th>Alter</th><th>Nat.</th></tr></thead>
+          <tbody id="club-loans-body"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="club-loans-empty" style="display:none;">Keine bekannten Leihspieler im aktuellen Kader.</div>
+    </div>
   </div>
   <div class="empty-state" id="club-none-selected">Wähle oben einen Verein aus, um seine Zu- und Abgänge zu sehen.</div>
 </main>
@@ -474,6 +484,7 @@
   }
 
   let niClubNames = new Set();
+  let manualLoans = {};
   function isDomestic(t){
     return niClubNames.has(t.from_club) && niClubNames.has(t.to_club);
   }
@@ -485,7 +496,9 @@
     return `<img class="crest" loading="lazy" alt="" src="https://www.anstoss-online.de/images/wappen/90/wappen${clubId}.png" onerror="this.style.display='none'">`;
   }
   function loanBadge(t){
-    return t.is_loan === true ? '<span class="loan-badge" title="Leihe">Leihe</span>' : '';
+    const manual = manualLoans[t.player_id];
+    const isLoan = manual !== undefined ? manual : t.is_loan;
+    return isLoan === true ? '<span class="loan-badge" title="Leihe">Leihe</span>' : '';
   }
   function playerLink(t){
     if(!t.player) return '–';
@@ -638,6 +651,13 @@
     console.error('Konnte clubs.json nicht laden:', e);
   }
 
+  try{
+    const resLoans = await fetch('manual_loans.json', { cache: 'no-store' });
+    manualLoans = await resLoans.json();
+  }catch(e){
+    console.error('Konnte manual_loans.json nicht laden:', e);
+  }
+
   fillTicker(rows);
   populateFilters(rows);
   updateStats(rows);
@@ -719,6 +739,14 @@
   updateExtraStats(allTransfers);
 
   // --- Vereins-Ansicht: Zugänge links, Abgänge rechts ---
+  let kaderLatest = { clubs: {} };
+  try{
+    const resKaderLatest = await fetch('kader_latest.json', { cache: 'no-store' });
+    kaderLatest = await resKaderLatest.json();
+  }catch(e){
+    console.error('Konnte kader_latest.json nicht laden:', e);
+  }
+
   try{
     const select = document.getElementById('club-select');
     clubsList
@@ -777,6 +805,30 @@
             <td class="num">${t.strength || '–'}</td>
             <td class="num">${t.age ?? '–'}</td>
             <td class="route">${crestImg(t.to_club_id)}${clubLink(t.to_club, t.to_club_id)}${loanBadge(t)}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Aktuell ausgeliehene Spieler: aus dem Kader-Snapshot, gefiltert auf
+      // manuell erfasste (oder automatisch erkannte) Leihspieler
+      const clubEntry = clubsList.find(c => c.name === club);
+      const squad = (clubEntry && kaderLatest.clubs) ? (kaderLatest.clubs[clubEntry.id] || []) : [];
+      const loanedPlayers = squad.filter(p => manualLoans[p.player_id] === true);
+
+      const loansBody = document.getElementById('club-loans-body');
+      const loansEmpty = document.getElementById('club-loans-empty');
+      if(!loanedPlayers.length){
+        loansBody.innerHTML = '';
+        loansEmpty.style.display = 'block';
+      }else{
+        loansEmpty.style.display = 'none';
+        loansBody.innerHTML = loanedPlayers.map(p => `
+          <tr>
+            <td class="player"><a class="player-link" href="https://www.anstoss-online.de/?do=spieler&spieler_id=${p.player_id}" target="_blank" rel="noopener">${p.player}</a></td>
+            <td class="pos">${posBadge(p.pos)}</td>
+            <td class="num">${p.strength || '–'}</td>
+            <td class="num">${p.age ?? '–'}</td>
+            <td>${p.nationality || '–'}</td>
           </tr>
         `).join('');
       }
