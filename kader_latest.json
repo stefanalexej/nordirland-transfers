@@ -2169,14 +2169,6 @@
         "nationality": "Nordirland"
       },
       {
-        "player_id": "184785",
-        "player": "Gareth Casey",
-        "pos": "LV RV",
-        "strength": "5.1",
-        "age": 19,
-        "nationality": "Nordirland"
-      },
-      {
         "player_id": "158951",
         "player": "Andy Calthrop",
         "pos": "LV RV",
@@ -2489,6 +2481,14 @@
         "strength": "6.1",
         "age": 35,
         "nationality": "Spanien"
+      },
+      {
+        "player_id": "178673",
+        "player": "Stewart Cowburn",
+        "pos": "ST",
+        "strength": "5.3",
+        "age": 20,
+        "nationality": "Schottland"
       }
     ],
     "4671": [
@@ -3367,14 +3367,6 @@
         "nationality": "SĂĽdkorea"
       },
       {
-        "player_id": "169751",
-        "player": "Ken Finian",
-        "pos": "TW",
-        "strength": "6.6",
-        "age": 22,
-        "nationality": "Nordirland"
-      },
-      {
         "player_id": "118006",
         "player": "Stuart Goodale",
         "pos": "TW",
@@ -3589,7 +3581,7 @@
         "player": "Nicolas Colmazio",
         "pos": "MD",
         "strength": "4.6",
-        "age": 34,
+        "age": 35,
         "nationality": "Italien"
       },
       {
