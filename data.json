@@ -1,5 +1,21 @@
 [
   {
+    "id": "155737-4668-414-17.07.2026",
+    "pos": "MD",
+    "player": "R. Decraen",
+    "player_id": "155737",
+    "strength": "5.9",
+    "age": 24,
+    "nationality": "Belgien",
+    "from_club": "Crusaders FV",
+    "from_club_id": "4668",
+    "to_club": "KVC Wisterlo",
+    "to_club_id": "414",
+    "date": "17.07.2026",
+    "scraped_at": "2026-07-17T07:29:49.871724+00:00",
+    "is_loan": false
+  },
+  {
     "id": "178229-4653-4668-16.07.2026",
     "pos": "LM RM",
     "player": "M. MintĂˇl",

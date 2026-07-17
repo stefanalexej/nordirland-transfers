@@ -1,5 +1,5 @@
 {
-  "date": "16.07.2026",
+  "date": "17.07.2026",
   "clubs": {
     "4668": [
       {
@@ -2193,6 +2193,14 @@
         "nationality": "Nordirland"
       },
       {
+        "player_id": "178993",
+        "player": "Emile Lindley",
+        "pos": "MD",
+        "strength": "2.3",
+        "age": 23,
+        "nationality": "Nordirland"
+      },
+      {
         "player_id": "146021",
         "player": "JosĂ© AntĂłnio Herivelto",
         "pos": "RV",
@@ -2255,6 +2263,14 @@
         "strength": "5.7",
         "age": 19,
         "nationality": "Slowenien"
+      },
+      {
+        "player_id": "142612",
+        "player": "Steve Ham",
+        "pos": "ZM",
+        "strength": "1.3",
+        "age": 28,
+        "nationality": "Nordirland"
       },
       {
         "player_id": "142832",

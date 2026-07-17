@@ -1,5 +1,37 @@
 [
   {
+    "id": "178993-None-5010-17.07.2026",
+    "date": "17.07.2026",
+    "player_id": "178993",
+    "player": "Emile Lindley",
+    "pos": "MD",
+    "strength": "2.3",
+    "age": 23,
+    "nationality": "Nordirland",
+    "from_club": "außerhalb Nordirland-1",
+    "from_club_id": null,
+    "to_club": "Ballymoney Soccer",
+    "to_club_id": "5010",
+    "is_loan": false,
+    "detected_at": "2026-07-17T07:30:22.498567+00:00"
+  },
+  {
+    "id": "142612-None-5010-17.07.2026",
+    "date": "17.07.2026",
+    "player_id": "142612",
+    "player": "Steve Ham",
+    "pos": "ZM",
+    "strength": "1.3",
+    "age": 28,
+    "nationality": "Nordirland",
+    "from_club": "außerhalb Nordirland-1",
+    "from_club_id": null,
+    "to_club": "Ballymoney Soccer",
+    "to_club_id": "5010",
+    "is_loan": false,
+    "detected_at": "2026-07-17T07:30:20.472868+00:00"
+  },
+  {
     "id": "178673-None-4665-16.07.2026",
     "date": "16.07.2026",
     "player_id": "178673",
