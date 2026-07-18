@@ -1,5 +1,5 @@
 {
-  "date": "17.07.2026",
+  "date": "18.07.2026",
   "clubs": {
     "4668": [
       {
@@ -2249,14 +2249,6 @@
         "nationality": "Nordirland"
       },
       {
-        "player_id": "186262",
-        "player": "Martin Srebotnik",
-        "pos": "ZM",
-        "strength": "5.7",
-        "age": 19,
-        "nationality": "Slowenien"
-      },
-      {
         "player_id": "142612",
         "player": "Steve Ham",
         "pos": "ZM",
@@ -2361,6 +2353,14 @@
         "strength": "5.1",
         "age": 23,
         "nationality": "Schweiz"
+      },
+      {
+        "player_id": "183555",
+        "player": "Laurent Leduc",
+        "pos": "MD",
+        "strength": "5.0",
+        "age": 21,
+        "nationality": "Martinique"
       },
       {
         "player_id": "159098",
@@ -2497,6 +2497,14 @@
         "strength": "5.3",
         "age": 20,
         "nationality": "Schottland"
+      },
+      {
+        "player_id": "177288",
+        "player": "Delf├Łn Ben├Łtez C├Īceres",
+        "pos": "ST",
+        "strength": "5.3",
+        "age": 22,
+        "nationality": "Paraguay"
       }
     ],
     "4671": [
