@@ -111,7 +111,7 @@
         "player": "Riad Tirone",
         "pos": "RM",
         "strength": "8.1",
-        "age": 34,
+        "age": 35,
         "nationality": "Frankreich"
       },
       {
@@ -1065,7 +1065,7 @@
         "player": "Peter Emens",
         "pos": "RM",
         "strength": "6.6",
-        "age": 24,
+        "age": 25,
         "nationality": "Nordirland"
       },
       {
@@ -1445,7 +1445,7 @@
         "player": "Nisa Mladjenovic",
         "pos": "RV",
         "strength": "5.4",
-        "age": 21,
+        "age": 22,
         "nationality": "Serbien"
       },
       {
@@ -1715,6 +1715,14 @@
         "nationality": "Nordirland"
       },
       {
+        "player_id": "181720",
+        "player": "Ivan Trickovski",
+        "pos": "ST",
+        "strength": "6.9",
+        "age": 19,
+        "nationality": "Nordmazedonien"
+      },
+      {
         "player_id": "159985",
         "player": "Mike Greenleaf",
         "pos": "ST",
@@ -1736,14 +1744,6 @@
         "pos": "ST",
         "strength": "4.7",
         "age": 25,
-        "nationality": "Nordirland"
-      },
-      {
-        "player_id": "185040",
-        "player": "Peter Kyran",
-        "pos": "ST",
-        "strength": "4.4",
-        "age": 18,
         "nationality": "Nordirland"
       }
     ],
@@ -3008,7 +3008,7 @@
         "pos": "TW",
         "strength": "5.8",
         "age": 34,
-        "nationality": "Sû¥dafrika"
+        "nationality": "S├╝dafrika"
       },
       {
         "player_id": "118517",
@@ -3072,11 +3072,11 @@
         "pos": "MD",
         "strength": "3.7",
         "age": 36,
-        "nationality": "Tû¥rkei"
+        "nationality": "T├╝rkei"
       },
       {
         "player_id": "159194",
-        "player": "Marinus Schû¥tz",
+        "player": "Marinus Sch├╝tz",
         "pos": "RV",
         "strength": "6.0",
         "age": 24,
@@ -3100,7 +3100,7 @@
       },
       {
         "player_id": "185467",
-        "player": "ûscar û. Bustos",
+        "player": "├ōscar ├ü. Bustos",
         "pos": "LM RM",
         "strength": "6.1",
         "age": 19,
@@ -3144,7 +3144,7 @@
         "pos": "ZM",
         "strength": "7.6",
         "age": 33,
-        "nationality": "RumûÊnien"
+        "nationality": "Rum├żnien"
       },
       {
         "player_id": "177208",
@@ -3153,6 +3153,14 @@
         "strength": "6.0",
         "age": 21,
         "nationality": "Algerien"
+      },
+      {
+        "player_id": "186262",
+        "player": "Martin Srebotnik",
+        "pos": "ZM",
+        "strength": "5.7",
+        "age": 19,
+        "nationality": "Slowenien"
       },
       {
         "player_id": "181373",
@@ -3164,7 +3172,7 @@
       },
       {
         "player_id": "127446",
-        "player": "MûÀrio Jorge Lobo Zagallo",
+        "player": "M├Īrio Jorge Lobo Zagallo",
         "pos": "ST",
         "strength": "8.3",
         "age": 33,
@@ -3193,14 +3201,6 @@
         "strength": "6.1",
         "age": 35,
         "nationality": "Schweden"
-      },
-      {
-        "player_id": "177992",
-        "player": "Manuel Gamboa",
-        "pos": "ST",
-        "strength": "5.4",
-        "age": 21,
-        "nationality": "Spanien"
       },
       {
         "player_id": "114269",
