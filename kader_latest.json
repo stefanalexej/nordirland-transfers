@@ -1,5 +1,5 @@
 {
-  "date": "19.07.2026",
+  "date": "20.07.2026",
   "clubs": {
     "4668": [
       {
@@ -89,14 +89,6 @@
         "strength": "4.4",
         "age": 19,
         "nationality": "Portugal"
-      },
-      {
-        "player_id": "176361",
-        "player": "Gert van der Linden",
-        "pos": "LM",
-        "strength": "5.6",
-        "age": 22,
-        "nationality": "Belgien"
       },
       {
         "player_id": "178229",
@@ -251,6 +243,14 @@
         "strength": "2.6",
         "age": 17,
         "nationality": "Nordirland"
+      },
+      {
+        "player_id": "143098",
+        "player": "Oleg Romaniuk",
+        "pos": "TW",
+        "strength": "1.0",
+        "age": 29,
+        "nationality": "Ukraine"
       },
       {
         "player_id": "147972",
@@ -419,14 +419,6 @@
         "strength": "5.1",
         "age": 18,
         "nationality": "Nordirland"
-      },
-      {
-        "player_id": "164389",
-        "player": "Alexandre Deiss",
-        "pos": "ST",
-        "strength": "5.1",
-        "age": 23,
-        "nationality": "Schweiz"
       }
     ],
     "4669": [
@@ -799,7 +791,7 @@
         "player": "Mark Hopley",
         "pos": "TW",
         "strength": "2.4",
-        "age": 24,
+        "age": 25,
         "nationality": "Nordirland"
       },
       {
@@ -1873,7 +1865,7 @@
         "player": "Lutel Ebdon",
         "pos": "ZM",
         "strength": "5.0",
-        "age": 33,
+        "age": 34,
         "nationality": "Nordirland"
       },
       {
@@ -2237,7 +2229,7 @@
         "player": "Steve Ham",
         "pos": "ZM",
         "strength": "1.3",
-        "age": 28,
+        "age": 29,
         "nationality": "Nordirland"
       },
       {
@@ -2400,7 +2392,7 @@
         "pos": "LM",
         "strength": "5.6",
         "age": 21,
-        "nationality": "├¢sterreich"
+        "nationality": "├ûsterreich"
       },
       {
         "player_id": "189578",
@@ -2448,7 +2440,7 @@
         "pos": "ZM",
         "strength": "5.1",
         "age": 32,
-        "nationality": "├¢sterreich"
+        "nationality": "├ûsterreich"
       },
       {
         "player_id": "184461",
@@ -2492,7 +2484,7 @@
       },
       {
         "player_id": "177288",
-        "player": "Delf├Łn Ben├Łtez C├Īceres",
+        "player": "Delf├¡n Ben├¡tez C├íceres",
         "pos": "ST",
         "strength": "5.3",
         "age": 22,
@@ -3000,7 +2992,7 @@
         "pos": "TW",
         "strength": "5.8",
         "age": 34,
-        "nationality": "Sû¥dafrika"
+        "nationality": "S├╝dafrika"
       },
       {
         "player_id": "118517",
@@ -3064,11 +3056,11 @@
         "pos": "MD",
         "strength": "3.7",
         "age": 36,
-        "nationality": "Tû¥rkei"
+        "nationality": "T├╝rkei"
       },
       {
         "player_id": "159194",
-        "player": "Marinus Schû¥tz",
+        "player": "Marinus Sch├╝tz",
         "pos": "RV",
         "strength": "6.0",
         "age": 24,
@@ -3092,7 +3084,7 @@
       },
       {
         "player_id": "185467",
-        "player": "ûscar û. Bustos",
+        "player": "├ōscar ├ü. Bustos",
         "pos": "LM RM",
         "strength": "6.1",
         "age": 19,
@@ -3136,7 +3128,7 @@
         "pos": "ZM",
         "strength": "7.6",
         "age": 33,
-        "nationality": "RumûÊnien"
+        "nationality": "Rum├żnien"
       },
       {
         "player_id": "177208",
@@ -3164,7 +3156,7 @@
       },
       {
         "player_id": "127446",
-        "player": "MûÀrio Jorge Lobo Zagallo",
+        "player": "M├Īrio Jorge Lobo Zagallo",
         "pos": "ST",
         "strength": "8.3",
         "age": 33,

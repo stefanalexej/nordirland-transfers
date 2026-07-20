@@ -1,5 +1,37 @@
 [
   {
+    "id": "176361-4668-5081-20.07.2026",
+    "pos": "LM",
+    "player": "G. van der Linden",
+    "player_id": "176361",
+    "strength": "5.6",
+    "age": 22,
+    "nationality": "Belgien",
+    "from_club": "Crusaders FV",
+    "from_club_id": "4668",
+    "to_club": "SKE-Energiya",
+    "to_club_id": "5081",
+    "date": "20.07.2026",
+    "scraped_at": "2026-07-20T10:25:13.284825+00:00",
+    "is_loan": false
+  },
+  {
+    "id": "164389-4660-5668-20.07.2026",
+    "pos": "ST",
+    "player": "A. Deiss",
+    "player_id": "164389",
+    "strength": "5.1",
+    "age": 23,
+    "nationality": "Schweiz",
+    "from_club": "Cliftonville FV",
+    "from_club_id": "4660",
+    "to_club": "FV Mulhouse",
+    "to_club_id": "5668",
+    "date": "20.07.2026",
+    "scraped_at": "2026-07-20T10:25:13.284990+00:00",
+    "is_loan": false
+  },
+  {
     "id": "177984-4660-5691-19.07.2026",
     "pos": "TW",
     "player": "D. Losier",
