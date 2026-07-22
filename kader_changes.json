@@ -1,5 +1,21 @@
 [
   {
+    "id": "169390-5010-None-22.07.2026",
+    "date": "22.07.2026",
+    "player_id": "169390",
+    "player": "Lee Clasper",
+    "pos": "ST",
+    "strength": "6.0",
+    "age": 21,
+    "nationality": "Nordirland",
+    "from_club": "Ballymoney Soccer",
+    "from_club_id": "5010",
+    "to_club": "außerhalb Nordirland-1",
+    "to_club_id": null,
+    "is_loan": null,
+    "detected_at": "2026-07-22T07:57:27.373074+00:00"
+  },
+  {
     "id": "179336-None-4668-21.07.2026",
     "date": "21.07.2026",
     "player_id": "179336",

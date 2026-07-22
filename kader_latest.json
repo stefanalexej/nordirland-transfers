@@ -1,5 +1,5 @@
 {
-  "date": "21.07.2026",
+  "date": "22.07.2026",
   "clubs": {
     "4668": [
       {
@@ -2255,14 +2255,6 @@
         "strength": "8.4",
         "age": 31,
         "nationality": "Estland"
-      },
-      {
-        "player_id": "169390",
-        "player": "Lee Clasper",
-        "pos": "ST",
-        "strength": "6.0",
-        "age": 21,
-        "nationality": "Nordirland"
       },
       {
         "player_id": "186468",
