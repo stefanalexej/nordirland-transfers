@@ -1,5 +1,21 @@
 [
   {
+    "id": "89328-4658-None-23.07.2026",
+    "date": "23.07.2026",
+    "player_id": "89328",
+    "player": "Erion Allou",
+    "pos": "RM",
+    "strength": "4.3",
+    "age": 36,
+    "nationality": "Albanien",
+    "from_club": "Glentoran FV",
+    "from_club_id": "4658",
+    "to_club": "außerhalb Nordirland-1",
+    "to_club_id": null,
+    "is_loan": null,
+    "detected_at": "2026-07-23T20:41:49.139428+00:00"
+  },
+  {
     "id": "148299-5013-None-23.07.2026",
     "date": "23.07.2026",
     "player_id": "148299",

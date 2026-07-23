@@ -2984,7 +2984,7 @@
         "pos": "TW",
         "strength": "5.8",
         "age": 34,
-        "nationality": "SÃždafrika"
+        "nationality": "Sû¥dafrika"
       },
       {
         "player_id": "177360",
@@ -3040,11 +3040,11 @@
         "pos": "MD",
         "strength": "3.7",
         "age": 36,
-        "nationality": "TÃžrkei"
+        "nationality": "Tû¥rkei"
       },
       {
         "player_id": "159194",
-        "player": "Marinus SchÃžtz",
+        "player": "Marinus Schû¥tz",
         "pos": "RV",
         "strength": "6.0",
         "age": 24,
@@ -3068,7 +3068,7 @@
       },
       {
         "player_id": "185467",
-        "player": "Ãscar Ã. Bustos",
+        "player": "ûscar û. Bustos",
         "pos": "LM RM",
         "strength": "6.1",
         "age": 19,
@@ -3089,14 +3089,6 @@
         "strength": "6.0",
         "age": 33,
         "nationality": "Deutschland"
-      },
-      {
-        "player_id": "89328",
-        "player": "Erion Allou",
-        "pos": "RM",
-        "strength": "4.3",
-        "age": 36,
-        "nationality": "Albanien"
       },
       {
         "player_id": "143072",
@@ -3120,7 +3112,7 @@
         "pos": "ZM",
         "strength": "7.6",
         "age": 33,
-        "nationality": "RumÃĪnien"
+        "nationality": "RumûÊnien"
       },
       {
         "player_id": "177208",
@@ -3144,7 +3136,7 @@
         "pos": "ZM",
         "strength": "5.3",
         "age": 21,
-        "nationality": "TÃžrkei"
+        "nationality": "Tû¥rkei"
       },
       {
         "player_id": "181373",
@@ -3156,7 +3148,7 @@
       },
       {
         "player_id": "127446",
-        "player": "MÃĄrio Jorge Lobo Zagallo",
+        "player": "MûÀrio Jorge Lobo Zagallo",
         "pos": "ST",
         "strength": "8.3",
         "age": 33,
