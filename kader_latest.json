@@ -2217,12 +2217,12 @@
         "nationality": "Schweiz"
       },
       {
-        "player_id": "172822",
-        "player": "Raimonds Kostjuks",
+        "player_id": "172199",
+        "player": "Edgar Steven Davids",
         "pos": "ZM",
-        "strength": "7.4",
-        "age": 20,
-        "nationality": "Lettland"
+        "strength": "7.6",
+        "age": 22,
+        "nationality": "Niederlande"
       },
       {
         "player_id": "142612",
@@ -3523,7 +3523,7 @@
         "player": "SĂ¸ren Bogh",
         "pos": "ST",
         "strength": "4.9",
-        "age": 18,
+        "age": 19,
         "nationality": "DĂ¤nemark"
       }
     ],

@@ -1,5 +1,37 @@
 [
   {
+    "id": "172822-5010-None-24.07.2026",
+    "date": "24.07.2026",
+    "player_id": "172822",
+    "player": "Raimonds Kostjuks",
+    "pos": "ZM",
+    "strength": "7.4",
+    "age": 20,
+    "nationality": "Lettland",
+    "from_club": "Ballymoney Soccer",
+    "from_club_id": "5010",
+    "to_club": "außerhalb Nordirland-1",
+    "to_club_id": null,
+    "is_loan": null,
+    "detected_at": "2026-07-24T20:53:24.715781+00:00"
+  },
+  {
+    "id": "172199-None-5010-24.07.2026",
+    "date": "24.07.2026",
+    "player_id": "172199",
+    "player": "Edgar Steven Davids",
+    "pos": "ZM",
+    "strength": "7.6",
+    "age": 22,
+    "nationality": "Niederlande",
+    "from_club": "außerhalb Nordirland-1",
+    "from_club_id": null,
+    "to_club": "Ballymoney Soccer",
+    "to_club_id": "5010",
+    "is_loan": true,
+    "detected_at": "2026-07-24T20:53:24.715762+00:00"
+  },
+  {
     "id": "89328-4658-None-23.07.2026",
     "date": "23.07.2026",
     "player_id": "89328",
