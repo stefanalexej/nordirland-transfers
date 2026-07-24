@@ -1,5 +1,21 @@
 [
   {
+    "id": "172822-5010-93-24.07.2026",
+    "pos": "ZM",
+    "player": "R. Kostjuks",
+    "player_id": "172822",
+    "strength": "7.4",
+    "age": 20,
+    "nationality": "Lettland",
+    "from_club": "Ballymoney Soccer",
+    "from_club_id": "5010",
+    "to_club": "Allez Rennes",
+    "to_club_id": "93",
+    "date": "24.07.2026",
+    "scraped_at": "2026-07-24T11:24:53.803682+00:00",
+    "is_loan": false
+  },
+  {
     "id": "148299-5013-339-23.07.2026",
     "pos": "MD",
     "player": "C. Vickers",
@@ -771,6 +787,40 @@
     "to_club_id": "4668",
     "date": "11.07.2026",
     "scraped_at": "2026-07-11T00:00:00+00:00"
+  },
+  {
+    "id": "183431-5377-4668-08.07.2026",
+    "pos": "LV",
+    "player": "Danijel Graso",
+    "player_id": "183431",
+    "strength": "6.4",
+    "age": 19,
+    "nationality": "Kroatien",
+    "from_club": "SC Papuk Velika",
+    "from_club_id": "5377",
+    "to_club": "Crusaders FV",
+    "to_club_id": "4668",
+    "date": "08.07.2026",
+    "is_loan": true,
+    "scraped_at": "2026-07-24T11:25:29.324016+00:00",
+    "nachgetragen": true
+  },
+  {
+    "id": "172033-119-4668-08.07.2026",
+    "pos": "LV RV",
+    "player": "Janus SkarÃḞenni",
+    "player_id": "172033",
+    "strength": "6.7",
+    "age": 21,
+    "nationality": "FÃĊrÃ¶er",
+    "from_club": "Virginia Turin",
+    "from_club_id": "119",
+    "to_club": "Crusaders FV",
+    "to_club_id": "4668",
+    "date": "08.07.2026",
+    "is_loan": true,
+    "scraped_at": "2026-07-24T11:25:32.736451+00:00",
+    "nachgetragen": true
   },
   {
     "id": "161332-5010-334-01.07.2026",
